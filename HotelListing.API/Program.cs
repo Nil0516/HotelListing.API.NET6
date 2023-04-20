@@ -13,6 +13,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
 using Serilog;
 using System.Text;
 
@@ -54,7 +55,6 @@ builder.Services.AddApiVersioning(options =>
                                 new HeaderApiVersionReader("X-Version"),
                                 new MediaTypeApiVersionReader("ver")
                                 );
-    
 });
 
 builder.Services.AddVersionedApiExplorer(
@@ -93,6 +93,12 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.AddResponseCaching(options =>
+{
+    options.MaximumBodySize = 1024;
+    options.UseCaseSensitivePaths = true;
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -109,6 +115,15 @@ app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");
+
+app.UseResponseCaching();
+
+app.Use(async (context, next) =>
+{
+    context.Response.GetTypedHeaders().CacheControl = new CacheControlHeaderValue() { Public = true, MaxAge = TimeSpan.FromSeconds(10) };
+    context.Response.Headers[HeaderNames.Vary] = new string[] { "Accept-Encoding" };
+    await next();
+});
 
 app.UseAuthentication();
 app.UseAuthorization();
