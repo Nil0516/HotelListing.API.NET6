@@ -19,8 +19,10 @@ namespace HotelListing.API.Repository
     {
         private const string _loginProvider = "HotelListingApi";
         private const string _refreshToken = "RefreshToken";
+        
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
+        private readonly ILogger _logger;
         private readonly UserManager<ApiUser> _userManager;
         private ApiUser _user;
 
@@ -28,12 +30,14 @@ namespace HotelListing.API.Repository
         private readonly string USER = "User";
         private readonly IAuthProvider _authProvider;
 
-        public AuthManagerRepository(IMapper mapper, IConfiguration configuration, IAuthProvider authProvider, UserManager<ApiUser> userManager)
+        public AuthManagerRepository(IMapper mapper, IConfiguration configuration, IAuthProvider authProvider, UserManager<ApiUser> userManager, 
+                                    ILogger<AuthManagerRepository> logger)
         {
             _mapper = mapper;
             _configuration = configuration;
             _userManager = userManager;
             _authProvider = authProvider;
+            _logger = logger;
         }
 
         public async Task<IEnumerable<IdentityError>> Register(ApiUserDto userDto)
@@ -53,10 +57,13 @@ namespace HotelListing.API.Repository
 
         public async Task<AuthResponceDto> Login(LoginDto loginDto)
         {
+            _logger.LogInformation($"Looking for user with emal {loginDto.Email}");
+
             _user = await _userManager.FindByEmailAsync(loginDto.Email);
 
             if (_user is null)
             {
+                _logger.LogWarning($"User with email {loginDto.Email} was default.");
                 return default;
             }
 
@@ -68,7 +75,6 @@ namespace HotelListing.API.Repository
             }
 
             var token = await GenerateToken();
-
             return new AuthResponceDto { UserId = _user.Id, Token = token, RefreshToken = await CreateRefreshToken() };
         }
 
