@@ -11,6 +11,7 @@ using AutoMapper;
 using HotelListing.API.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using HotelListing.API.Exceptions;
+using HotelListing.API.Models;
 
 namespace HotelListing.API.Controllers
 {
@@ -40,7 +41,7 @@ namespace HotelListing.API.Controllers
         }
 
         // GET: api/Countries/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}")] 
         public async Task<ActionResult<CountryDto>> GetCountry(int id)
         {
             var country = await _countriesRepository.GetDetails(id);
