@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.AspNetCore.OData;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -99,6 +100,10 @@ builder.Services.AddResponseCaching(options =>
     options.UseCaseSensitivePaths = true;
 });
 
+builder.Services.AddControllers().AddOData(options => {
+    options.Select().Filter().OrderBy();
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -116,7 +121,7 @@ app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");
 
-app.UseResponseCaching();
+//app.UseResponseCaching();
 
 app.Use(async (context, next) =>
 {
