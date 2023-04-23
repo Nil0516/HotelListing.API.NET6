@@ -23,14 +23,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 var connectionString = builder.Configuration.GetConnectionString("HotelListingDbConnectionString");
-builder.Services.AddDbContext<HotelListListingDbContext>(options => {
+builder.Services.AddDbContext<HotelListingDbContext>(options => {
     options.UseSqlServer(connectionString);
 });
 
 builder.Services.AddIdentityCore<ApiUser>()
                 .AddRoles<IdentityRole>()
                 .AddTokenProvider<DataProtectorTokenProvider<ApiUser>>("HotelListingApi")
-                .AddEntityFrameworkStores<HotelListListingDbContext>()
+                .AddEntityFrameworkStores<HotelListingDbContext>()
                 .AddDefaultTokenProviders();
 
 builder.Services.AddControllers();

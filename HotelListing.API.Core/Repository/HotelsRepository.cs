@@ -7,9 +7,9 @@ namespace HotelListing.API.Core.Repository
 {
     public class HotelsRepository : GenericRepository<Hotel>, IHotelsRepository
     {
-        private readonly HotelListListingDbContext _context;
+        private readonly HotelListingDbContext _context;
 
-        public HotelsRepository(HotelListListingDbContext context, IMapper mapper) : base(context, mapper)
+        public HotelsRepository(HotelListingDbContext context, IMapper mapper) : base(context, mapper)
         {
             _context = context;
         }

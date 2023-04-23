@@ -9,10 +9,10 @@ namespace HotelListing.API.Core.Repository
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        private readonly HotelListListingDbContext _context;
+        private readonly HotelListingDbContext _context;
         private readonly IMapper _mapper;
 
-        public GenericRepository(HotelListListingDbContext context, IMapper mapper)
+        public GenericRepository(HotelListingDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
