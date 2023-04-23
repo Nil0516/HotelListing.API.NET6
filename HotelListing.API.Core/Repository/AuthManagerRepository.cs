@@ -57,7 +57,7 @@ namespace HotelListing.API.Core.Repository
             return result.Errors;
         }
 
-        public async Task<AuthResponceDto> Login(LoginDto loginDto)
+        public async Task<AuthResponseDto> Login(LoginDto loginDto)
         {
             _logger.LogInformation($"Looking for user with emal {loginDto.Email}");
 
@@ -77,7 +77,7 @@ namespace HotelListing.API.Core.Repository
             }
 
             var token = await GenerateToken();
-            return new AuthResponceDto { UserId = _user.Id, Token = token, RefreshToken = await CreateRefreshToken() };
+            return new AuthResponseDto { UserId = _user.Id, Token = token, RefreshToken = await CreateRefreshToken() };
         }
 
         public async Task<string> GenerateToken()
@@ -117,7 +117,7 @@ namespace HotelListing.API.Core.Repository
             return newRefreshToken;
         }
 
-        public async Task<AuthResponceDto> VerifyRefreshToken(AuthResponceDto request)
+        public async Task<AuthResponseDto> VerifyRefreshToken(AuthResponseDto request)
         {
             var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
             var tokenContent = jwtSecurityTokenHandler.ReadJwtToken(request.Token);
@@ -134,7 +134,7 @@ namespace HotelListing.API.Core.Repository
             if (isValidRefreshToken)
             {
                 var token = await GenerateToken();
-                return new AuthResponceDto
+                return new AuthResponseDto
                 {
                     Token = token,
                     UserId = _user.Id,
