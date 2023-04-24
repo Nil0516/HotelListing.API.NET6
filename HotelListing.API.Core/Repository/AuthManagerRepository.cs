@@ -32,13 +32,12 @@ namespace HotelListing.API.Core.Repository
         private readonly string USER = "User";
         private readonly IAuthProvider _authProvider;
 
-        public AuthManagerRepository(IMapper mapper, IConfiguration configuration, IAuthProvider authProvider, UserManager<ApiUser> userManager, 
+        public AuthManagerRepository(IMapper mapper, IConfiguration configuration, UserManager<ApiUser> userManager, 
                                     ILogger<AuthManagerRepository> logger)
         {
             _mapper = mapper;
             _configuration = configuration;
             _userManager = userManager;
-            _authProvider = authProvider;
             _logger = logger;
         }
 
